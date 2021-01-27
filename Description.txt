@@ -1,0 +1,181 @@
+Assignment 2.
+
+Note: See assign2Updates.txt for changes, updates and/or clarifications
+to this assignment. Check regularly before submitting to make sure you
+haven't missed anything.
+
+Part 0. Completing your Iam.txt file and Groups
+-----------------------------------------------
+Copy Iam.txt to your own space and complete it by replacing "XXXXXXX" with
+YOUR appropriate information.
+
+You may do the assignment alone, or in groups of 2 or 3 students. Your
+group may comprise members from different CPS393 sections/classes.
+IF you are part of a group, designate a "submit person" and that student
+will be THE ONLY ONE to submit the other files. If you work alone, YOU
+are the submit person.
+
+Every student submits her/his OWN Iam.txt file, whether working alone
+or in a group.
+
+
+Part 1. assign2.c
+------------------
+Write a C program in 3 files as follows:
+assign2.c       -main function
+assign2funcs.c  -functions used by main
+assign2funcs.h  -prototypes for functions defined in assign2funcs.c
+
+Your program implements a simplistic version of the Linux cut command.
+It is "simplistic" in that:
+ -it only cuts FIELDS (not characters, bytes, etc).
+ -it requires between 1 and 100 fields (inclusive)
+ -it requires fields to be unique, and specified in increasing order
+ -it does not implement any functionality of cut other than cutting
+  fields with given input delimiter and output delimiter
+ -the format of its command line arguments are simpler than cut's
+
+DO NOT call the cut command itself, nor any other Linux command from
+your code (e.g., with a system call). Any such calls result in zero on
+the assignment.
+
+Your program expects command line arguments (CLAs) specifying the
+following, in this order:
+  -input  delimiter (a single character)
+  -output delimiter (a single character)
+  -field(s) (at least one, and at most 100, unique positive integers,
+   given in increasing order of size)
+Examples of proper calls to your program:
+> a.out , . 2 4 5 6 9 <inputFile
+> a.out , , 3 <inputFile
+> a.out x y 1 4 32 33 37 42 57 77 86 204 337 <inputFile
+Examples of improper calls:
+> a.out ,, . 2 4 5 6 9 <inputFile   #wrong input delimiter
+> a.out , . 2 4-6 9 <inputFile      #wrong field(s)
+> a.out  <inputFile                 #ddCLAs missing
+> a.out , . 4 4 5 6 9 <inputFile    #wrong field(s)
+> a.out , . 4 2 5  <inputFile       #wrong field(s)
+> a.out , . 4 2 5  <inputFile       #wrong field(s)
+
+If CLAs are not as required above, print the following message on
+stderr and exit with exit code 1:
+a.out: specify input_delimiter output_delimiter and 1-100 fields in order
+Note that in the above error message, the following are NOT hard-coded,
+but are obtained from appropriate arguments: "a.out", "100". Also,
+"a.out" must be obtained from argv[0] and "100" must be from a
+#define preprocessor directive.
+If the program run does not result in error, exit with exit code 0.
+
+Your program reads input from stdin only, with fields separated by a
+single input delimiter. e.g., the following file contains 3 lines,
+where line 1 has 4 fields, line 2 has 2 fields, and line 3 has 6
+fields (with input delimiter ","):
+abc,de,f,ghi
+a   b,cd
+a,,cdefg,hi  jkl,     m     ,
+Your program writes output to stdout (and error message to stderr).
+For each line of input, your program displays the required fields
+on stdout using the output delimiter to separate fields.
+e.g., if the above input file was named "thefile", then the following
+run of your program produces the following output:
+> ./a.out , , 1 3 <thefile
+abc,f
+a   b
+a,cdefg
+>
+
+Part 2. assign2funcs.[ch]
+-------------------------
+Your main function must be in assign2.c. You must write & use
+appropriate additional functions, with their declarations and
+definitions in files assign2funcs.h and assign2funcs.c,
+respectively. The TAs will compile your program as follows:
+> gcc assign2.c assign2funcs.c
+
+Part 3. Testing Your Program:
+----------------------------
+. E.g., the following two must produce
+identical output (files "actual" and "expected" must be identical):
+>a.out , . 16 17 25 <input >actual
+>cut -d, --output-delimiter=. -f16,17,25 <input >expected
+The Linux "diff" command can verify actual and expected are identical.
+I.e., the following should produce no output:
+>diff actual expected
+
+A simple testing shell program named "testit" is included in this
+directory, along with input file "input", which is used by testit.
+When a.out is a correct program, testit outputs:
+all tests successful
+If, for example, test 4 fails, then testit outputs:
+FAILED test 4
+
+NOTE: The tests in testit are examples of a few very basic tests.
+Do not rely upon ONLY those tests. The TAs will test your program
+much more thoroughly. "testit" was supplied simply to help you
+test your code. You do NOT submit any testing program(s).
+----------------------------
+Part 4. Submitting:
+------------------
+Use the following command to submit your files: submit-cps393dwoit
+Submit one file at a time. Remember, if you are working in a group,
+you still submit your own Iam.txt, but only the group's submit
+person submits the remaining files.
+submit-cps393dwoit Iam.txt
+submit-cps393dwoit assign2.c
+submit-cps393dwoit assign2funcs.c
+submit-cps393dwoit assign2funcs.h
+
+If Linux cannot find submit-cps393dwoit then use its absolute path name
+instead; e.g.:
+/usr/courses/bin/x86_64/submit-cps393dwoit Iam.txt
+
+If you RESUBMIT a file, your previously submitted file will be overwritten.
+So if you need to modify a file (and the due date/time has not yet passed)
+then simply submit it again. However, if you resubmit PAST the due date/time
+then you will end up with a zero on the assignment, as we have no way of
+verifying any previous file submissions.
+
+Checking what you have submitted:
+--------------------------------
+Use the following command to check what you have submitted already.
+check-submit-cps393dwoit
+It provides a listing of all the files you have submitted so far.
+You can't DELETE any files you have submitted, so just ignore them. We
+will only view files with the correct name, anyway.
+
+Part 5. Marking:
+---------------
+The TAs will grade your assignment according to the following scheme.
+You may get a zero on the assignment for any reason mentioned in this
+document, including, but not limited to:
+  -Iam.txt file not submitted (every student submits this file)
+  -a file is missing (not submitted)
+  -a file is named incorrectly
+  -your code calls a Linux command (e.g., a system call)
+  -a file submitted late
+
+Out of 17 marks total, as follows:
+  ----------------------------------
+
+  17 Correct output for TA tests (i.e., same as cut's)
+
+  The following mark reductions are possible. Maximum deductions
+  in each category are as follows:
+  -02 Style; Efficiency; Documentation (see
+      /usr/courses/cps393/dwoit/labs/doc.txt)
+  -02 CLA processing
+  -02 error message and exit codes
+  -03 processing of stdin input
+  -02 division into files
+  -03 appropriate design/use of functions
+  -03 a good attempt which compiles and runs
+
+  Note that your program may produce the same output as cut, but
+  may obtain a mark of 0/17 because of mark reductions for not
+  following instructions, as above.
+
+  Your TAs may ask you to answer questions about your assignment in a
+  one-on-one zoom session. In addition, they may ask you to write code
+  during the session in order to demonstrate that you completely
+  understand your solution.  If the TA is not satisfied with your
+  code/explanations, your mark can be reduced all the way down to zero.
